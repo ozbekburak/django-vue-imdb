@@ -35,7 +35,6 @@ def MovieTitle(moviedata):
         # get movie link
         response = requests.get(url)
 
-
         try:
            html_soup = BeautifulSoup(response.text, 'html.parser')
         except ConnectionError as e:
@@ -45,23 +44,16 @@ def MovieTitle(moviedata):
         movie_containers = html_soup.find_all(
             'div', class_='lister-item mode-advanced')
 
-
-
-
-
-
-
-
         movieID = getID(movieSearchResult)
         title = movieSearchResult[0]['title']
         year = getYear(movieSearchResult)
         genre = getGenre(movie_containers)
         rating = getRating(movie_containers)
-        
+        soundtrack = getSoundtrack(movieID)
 
-        listAllDetail = [movieID, title , year, genre, rating ]
+        listAllDetail = [movieID, title , year, genre, rating, soundtrack ]
         getMovieTitleSerialized = json.dumps(listAllDetail)
-        print(getMovieTitleSerialized)
+
         return JsonResponse(getMovieTitleSerialized, safe=False)
     except ValueError as e:
         return Response(e.args[0].status.HTTP_400_BAD_REQUEST)
@@ -74,37 +66,38 @@ def getYear(getMovie):
 
 def getGenre(movieContainers):
     genre = movieContainers[0].p.find('span', class_='genre').text
-    return ''.join(genre.split()) # convert list to string
+    return ''.join(genre.split())  # convert list to string
 
 def getRating(movieContainers):
     rating = movieContainers[0].find('strong', class_='').text
     return rating
 
-# def getSoundtrack():
-#     # get soundtrack of movies as url
-#     songUrl = 'https://www.imdb.com/title/tt{}/soundtrack'.format(getID())
-#     responseSoundtrack = requests.get(songUrl)
+def getSoundtrack(movieID):
+  # get soundtrack of movies as url
+  songUrl = 'https://www.imdb.com/title/tt{}/soundtrack'.format(movieID)
+  responseSoundtrack = requests.get(songUrl)
 
-#     try:
-#         html_soundtrack_soup = BeautifulSoup(
-#             responseSoundtrack.text, 'html.parser')
-#     except ConnectionError as e:
-#         print(e)
+  try:
+      html_soundtrack_soup = BeautifulSoup(
+          responseSoundtrack.text, 'html.parser')
+  except ConnectionError as e:
+      print(e)
 
-#     movie_song_containers = html_soundtrack_soup.find_all(
-#         'div', class_='header')
+  movie_song_containers = html_soundtrack_soup.find_all(
+      'div', class_='header')
 
-#     # soundtrack soda {even} {odd} -> regex for this discrimination
-#     regexSongsClass = re.compile("^soundTrack soda.*")
+   # soundtrack soda {even} {odd} -> regex for this discrimination
+  regexSongsClass = re.compile("^soundTrack soda.*")
 
-#     songs = movie_song_containers[0].find_all(
-#         'div', class_=regexSongsClass)
-#     songList = []
-#     for i in range(0, len(songs)):
-#         songList.append(songs[i].text)
-#     if songList == []:
-#         return "No soundtrack found"
-#     return ''.join(songList)
+  songs = movie_song_containers[0].find_all(
+      'div', class_=regexSongsClass)
+  songList = []
+  for i in range(0, len(songs)):
+    songList.append(songs[i].text)
+  if songList == []:
+    return "No soundtrack found"
+  return ''.join(songList)
+  # print ('\n'.join(''.join(songList[0:len(songs)]) for i in range(0,len(songs),3)))
 
 
 

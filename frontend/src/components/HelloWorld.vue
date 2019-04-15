@@ -32,6 +32,8 @@
           <h1 class="subtitle"> Movie Genre:  {{ moviedetail[3] }}  </h1>
 
           <h1 class="subtitle"> Movie Rating:  {{ moviedetail[4] }}  </h1>
+
+          <h1 class="subtitle"> Movie Soundtrack List:  {{ moviedetail[5] }}  </h1>
         </div>
       </div>
     </form>
