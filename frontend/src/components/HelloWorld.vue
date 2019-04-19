@@ -23,17 +23,48 @@
           <span class="fa-stack">
             <i class="fas fa-camera"></i>             
           </span>
-          <h1 class="subtitle"> Movie ID:  {{ moviedetail[0] }} </h1>
+                  
+        <table align="center" class="table">
+            <thead>
+              <tr>
+                <th>Movie ID</th>
+                <th>Title</th>
+                <th>Year</th>
+                <th>Genre</th>
+                <th>Rating</th>
+              </tr>        
+            </thead>
+            
+            <tbody>
+              <tr>
+                <td>{{ moviedetail[0] }}</td>
+                <td>{{ moviedetail[1] }}</td>
+                <td>{{ moviedetail[2] }}</td>
+                <td>{{ moviedetail[3] }}</td>
+                <td>{{ moviedetail[4] }}</td>
+              </tr>
+            </tbody>                  
+          </table>
 
-          <h1 class="subtitle"> Movie Title:  {{ moviedetail[1] }} </h1>
 
-          <h1 class="subtitle"> Movie Year:  {{ moviedetail[2] }}  </h1>
+          <table align="center" class="table">
+            <thead>
+              <tr>
+                <th>Song Name</th>
+                <th>Written By</th>
+                <th>Performed By</th>
+              </tr>        
+            </thead>
+            
+            <tbody>
+              <tr>
+                <td>{{ songName }}</td>
+                <td>{{ writer }}</td>
+                <td>{{ performer }}</td>
+              </tr>
+            </tbody>                  
+          </table>
 
-          <h1 class="subtitle"> Movie Genre:  {{ moviedetail[3] }}  </h1>
-
-          <h1 class="subtitle"> Movie Rating:  {{ moviedetail[4] }}  </h1>
-
-          <h1 class="subtitle"> Movie Soundtrack List:  {{ moviedetail[5] }}  </h1>
         </div>
       </div>
     </form>
@@ -45,9 +76,14 @@ import axios from 'axios'
 export default {
   name: 'HelloWorld',
   data () {
+  
     return {
       moviedetail: '',
-      title: ''
+      title: '',
+      movieSoundtrack: '',
+      songName: '',
+      writer: '',
+      performer: ''      
     }
   },
   methods: {
@@ -60,10 +96,13 @@ export default {
               title: this.title
             }
          }).then((response) => {
-           let newmoviedetail = response.data
-           console.log(newmoviedetail)
+           let newmoviedetail = response.data            
            this.moviedetail = JSON.parse(newmoviedetail);
            
+           this.songName = Object.entries(this.moviedetail[5][3])[0][0]
+           this.writer = Object.entries(this.moviedetail[5][3])[0][1]['written by']
+           this.performer = Object.entries(this.moviedetail[5][3])[0][1]['performed by']
+
          }).catch((error) => {
            console.log(error);
          });
@@ -81,6 +120,10 @@ export default {
   text-align: center;
 }
 .control{
+  text-align: center;
+}
+
+th{
   text-align: center;
 }
 </style>

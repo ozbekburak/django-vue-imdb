@@ -49,9 +49,11 @@ def MovieTitle(moviedata):
         year = getYear(movieSearchResult)
         genre = getGenre(movie_containers)
         rating = getRating(movie_containers)
-        soundtrack = getSoundtrack(movieID)
+        soundtrack = getSoundtrackWithImdbpy(movieID)
+        
+        
 
-        listAllDetail = [movieID, title , year, genre, rating, soundtrack ]
+        listAllDetail = [movieID, title , year, genre, rating, soundtrack]
         getMovieTitleSerialized = json.dumps(listAllDetail)
 
         return JsonResponse(getMovieTitleSerialized, safe=False)
@@ -72,33 +74,8 @@ def getRating(movieContainers):
     rating = movieContainers[0].find('strong', class_='').text
     return rating
 
-def getSoundtrack(movieID):
-  # get soundtrack of movies as url
-  songUrl = 'https://www.imdb.com/title/tt{}/soundtrack'.format(movieID)
-  responseSoundtrack = requests.get(songUrl)
-
-  try:
-      html_soundtrack_soup = BeautifulSoup(
-          responseSoundtrack.text, 'html.parser')
-  except ConnectionError as e:
-      print(e)
-
-  movie_song_containers = html_soundtrack_soup.find_all(
-      'div', class_='header')
-
-   # soundtrack soda {even} {odd} -> regex for this discrimination
-  regexSongsClass = re.compile("^soundTrack soda.*")
-
-  songs = movie_song_containers[0].find_all(
-      'div', class_=regexSongsClass)
-  songList = []
-  for i in range(0, len(songs)):
-    songList.append(songs[i].text)
-  if songList == []:
-    return "No soundtrack found"
-  return ''.join(songList)
-  # print ('\n'.join(''.join(songList[0:len(songs)]) for i in range(0,len(songs),3)))
-
-
-
+def getSoundtrackWithImdbpy(movieID):
+  ms = imdbpy_library.get_movie(movieID)
+  imdbpy_library.update(ms, 'soundtrack')
+  return (ms['soundtrack'])
 
