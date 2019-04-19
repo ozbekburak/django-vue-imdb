@@ -50,10 +50,10 @@ def MovieTitle(moviedata):
         genre = getGenre(movie_containers)
         rating = getRating(movie_containers)
         soundtrack = getSoundtrackWithImdbpy(movieID)
-        
+        location = getLocationWithImdbpy((movieID))
         
 
-        listAllDetail = [movieID, title , year, genre, rating, soundtrack]
+        listAllDetail = [movieID, title , year, genre, rating, soundtrack, location]
         getMovieTitleSerialized = json.dumps(listAllDetail)
 
         return JsonResponse(getMovieTitleSerialized, safe=False)
@@ -79,3 +79,6 @@ def getSoundtrackWithImdbpy(movieID):
   imdbpy_library.update(ms, 'soundtrack')
   return (ms['soundtrack'])
 
+def getLocationWithImdbpy(movieID):
+    locations = imdbpy_library.get_movie_locations(movieID)
+    return locations['data']['locations']
