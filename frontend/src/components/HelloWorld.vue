@@ -57,10 +57,12 @@
             </thead>
             
             <tbody>
-              <tr>
-                <td>{{ songName }}</td>
-                <td>{{ writer }}</td>
-                <td>{{ performer }}</td>
+              <tr v-for="index in (songList.length)">                
+                <td>{{ songList[index-1] }}</td>
+      
+                <td>{{ writerList[index-1] }}</td>
+        
+                <td>{{ performerList[index-1] }}</td>                
               </tr>
             </tbody>                  
           </table>
@@ -80,10 +82,9 @@ export default {
     return {
       moviedetail: '',
       title: '',
-      movieSoundtrack: '',
-      songName: '',
-      writer: '',
-      performer: ''      
+      songList: [],
+      writerList: [],
+      performerList: []      
     }
   },
   methods: {
@@ -96,13 +97,16 @@ export default {
               title: this.title
             }
          }).then((response) => {
-           let newmoviedetail = response.data            
+           let newmoviedetail = response.data;            
            this.moviedetail = JSON.parse(newmoviedetail);
-           
-           this.songName = Object.entries(this.moviedetail[5][3])[0][0]
-           this.writer = Object.entries(this.moviedetail[5][3])[0][1]['written by']
-           this.performer = Object.entries(this.moviedetail[5][3])[0][1]['performed by']
 
+           let songsLength = Object.keys(this.moviedetail[5]).length;
+           let i;
+           for(i=0; i < songsLength; i++ ){             
+             this.songList.push(Object.entries(this.moviedetail[5][i])[0][0])
+             this.writerList.push(Object.entries(this.moviedetail[5][i])[0][1]['written by'])
+             this.performerList.push(Object.entries(this.moviedetail[5][i])[0][1]['performed by'])             
+           }
          }).catch((error) => {
            console.log(error);
          });
