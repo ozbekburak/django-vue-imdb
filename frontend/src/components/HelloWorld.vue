@@ -7,68 +7,76 @@
       <div class="field">
         <label class="label">in an easy way</label>
         <div class="control">
-            <input class="input is-rounded" type="text" v-model="title"> <!-- Connects this field to the title variable -->
+          <input class="input is-rounded" type="text" v-model="title"> <!-- Connects this field to the title variable -->    
         </div>
-      </div>
-
-      <div>
-        <div class="control">
-          <button class="button is-info is-rounded is-focused">Get Detail</button>
-        </div>
-      </div>
-
-       <div>
-        <div class="control">
-          <hr>
-          <span class="fa-stack">
-            <i class="fas fa-camera"></i>             
-          </span>
-                  
-        <table align="center" class="table">
-            <thead>
-              <tr>
-                <th>Movie ID</th>
-                <th>Title</th>
-                <th>Year</th>
-                <th>Genre</th>
-                <th>Rating</th>
-              </tr>        
-            </thead>
-            
-            <tbody>
-              <tr>
-                <td>{{ moviedetail[0] }}</td>
-                <td>{{ moviedetail[1] }}</td>
-                <td>{{ moviedetail[2] }}</td>
-                <td>{{ moviedetail[3] }}</td>
-                <td>{{ moviedetail[4] }}</td>
-              </tr>
-            </tbody>                  
-          </table>
-
-
-          <table align="center" class="table">
-            <thead>
-              <tr>
-                <th>Song Name</th>
-                <th>Written By</th>
-                <th>Performed By</th>
-              </tr>        
-            </thead>
-            
-            <tbody>
-              <tr v-for="index in (songList.length)">                
-                <td>{{ songList[index-1] }}</td>
+        <br>
+        <button class="button is-info is-rounded is-focused">Get Detail</button>
+        <hr>
+      </div> 
       
-                <td>{{ writerList[index-1] }}</td>
-        
-                <td>{{ performerList[index-1] }}</td>                
-              </tr>
-            </tbody>                  
-          </table>
+        <table align="right" class="table">
+        <thead>
+            <tr>
+              <th>Locations</th>
+            </tr>        
+        </thead>            
+        <tbody>
+          <tr v-for="index in locationList.length">                
+            <td>{{ locationList[index-1] }}</td>          
+          </tr>
+        </tbody>                  
+      </table>
 
-        </div>
-      </div>
+        <table align="left" class="table">
+          <thead>
+            <tr>
+              <th>Movie ID</th>
+              <th>Title</th>
+              <th>Year</th>
+              <th>Genre</th>
+              <th>Rating</th>              
+            </tr>        
+          </thead>
+            
+          <tbody>
+            <tr>
+              <td>{{ moviedetail[0] }}</td>
+              <td>{{ moviedetail[1] }}</td>
+              <td>{{ moviedetail[2] }}</td>
+              <td>{{ moviedetail[3] }}</td>
+              <td>{{ moviedetail[4] }}</td>                
+            </tr>
+          </tbody>                  
+        </table>
+      
+
+      
+    
+
+       <table align="center" class="table">
+        <thead>
+          <tr>
+            <th>Song Name</th>
+              <th>Written By</th>
+              <th>Performed By</th>
+              </tr>        
+        </thead>
+            
+         <tbody>
+          <tr v-for="index in (songList.length)">                
+             <td>{{ songList[index-1] }}</td>
+             <td>{{ writerList[index-1] }}</td>
+             <td>{{ performerList[index-1] }}</td>                
+          </tr>
+         </tbody>                  
+       </table> 
+      
+   
+
+
+   
+   
+   
     </form>
   </div>
 </template>
@@ -82,6 +90,7 @@ export default {
     return {
       moviedetail: '',
       title: '',
+      locationList: [],
       songList: [],
       writerList: [],
       performerList: []      
@@ -98,15 +107,30 @@ export default {
             }
          }).then((response) => {
            let newmoviedetail = response.data;            
-           this.moviedetail = JSON.parse(newmoviedetail);
-
-           let songsLength = Object.keys(this.moviedetail[5]).length;
+           this.moviedetail = JSON.parse(newmoviedetail);         
            let i;
+           
+           
+
+           // önceki aramayla append olmaması için location listesini boşaltıyoruz.
+           this.locationList = []
+           for(i = 0; i<this.moviedetail[6].length; i++){
+            this.locationList.push(this.moviedetail[6][i])
+           }
+           console.log(this.locationList)
+
+           
+           // şarkı listesi için uzunluk alıyoruz.
+           let songsLength = Object.keys(this.moviedetail[5]).length;           
+
+           // önceki aramayla birbirlerine append olmaması için listeyi boşaltıyoruz.
+           this.songList = []
            for(i=0; i < songsLength; i++ ){             
              this.songList.push(Object.entries(this.moviedetail[5][i])[0][0])
              this.writerList.push(Object.entries(this.moviedetail[5][i])[0][1]['written by'])
              this.performerList.push(Object.entries(this.moviedetail[5][i])[0][1]['performed by'])             
            }
+        
          }).catch((error) => {
            console.log(error);
          });

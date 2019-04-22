@@ -1,9 +1,6 @@
 <template>
   <div id="app">
-    
     <img id="imdblogo" src="./assets/imdb.png">
-    
-    
     <router-view/>
   </div>
 </template>
@@ -26,10 +23,5 @@ export default {
 #imdblogo{
   width: 20%;
 }
-#vuelogo{
-  width: 10%;
-}
-#djangologo{
-  width: 20%;
-}
+
 </style>
