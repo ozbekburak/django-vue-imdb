@@ -14,7 +14,7 @@
         <hr>
       </div> 
       
-        <table align="right" class="table">
+      <table is-fullwidth align="right" class="table" >
         <thead>
             <tr>
               <th>Locations</th>
@@ -27,7 +27,7 @@
         </tbody>                  
       </table>
 
-        <table align="left" class="table">
+        <table is-fullwidth align="left" class="table">
           <thead>
             <tr>
               <th>Movie ID</th>
@@ -49,10 +49,6 @@
           </tbody>                  
         </table>
       
-
-      
-    
-
        <table align="center" class="table">
         <thead>
           <tr>
@@ -71,12 +67,6 @@
          </tbody>                  
        </table> 
       
-   
-
-
-   
-   
-   
     </form>
   </div>
 </template>
