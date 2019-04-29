@@ -91,7 +91,7 @@ export default {
       if (this.title) {
           axios({
             method: 'post',
-            url: 'http://127.0.0.1:8000/movietitle/',
+            url: 'http://127.0.0.1:8000/moviedetail/',
             data: {
               title: this.title
             }

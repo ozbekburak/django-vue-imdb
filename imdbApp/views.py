@@ -18,7 +18,7 @@ imdbpy_library = IMDb()
 
 # Create your views here.
 @api_view(["POST"])
-def MovieTitle(moviedata):
+def MovieDetail(moviedata):
    
     try:       
        

@@ -6,7 +6,7 @@ class test_movie(APITestCase):
     def setUp(self):
         self.client = APIClient()
         self.data={"title":"Oslo 31"}
-        self.response = self.client.post('movietitle/', {'title': 'oslo 31'}, format='json')
+        self.response = self.client.post('moviedetail/', {'title': 'oslo 31'}, format='json')
 
     def test_worksAPIorNot(self):
         print(self.response.status_code)

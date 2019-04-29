@@ -21,5 +21,5 @@ from imdbApp import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^movietitle/',views.MovieTitle)
+    url(r'^moviedetail/',views.MovieDetail)
 ]
