@@ -14,18 +14,18 @@ import requests
 from imdb import IMDb
 from urllib.parse import quote
 
-imdbpy_library = IMDb()
+imdbpyLibrary = IMDb()
 
 # Create your views here.
 @api_view(["POST"])
-def MovieTitle(moviedata):
+def MovieDetail(moviedata):
    
     try:       
        
         movieUnicode = moviedata.body.decode('utf-8')
         movieData = json.loads(movieUnicode) 
 
-        movieSearchResult = imdbpy_library.search_movie(movieData['title'])
+        movieSearchResult = imdbpyLibrary.search_movie(movieData['title'])
         
          # batman begins -> batman+begins
         filterMovieName = quote(movieSearchResult[0]['title'].replace(" ", "+"))
@@ -49,36 +49,37 @@ def MovieTitle(moviedata):
         year = getYear(movieSearchResult)
         genre = getGenre(movie_containers)
         rating = getRating(movie_containers)
-        soundtrack = getSoundtrackWithImdbpy(movieID)
-        location = getLocationWithImdbpy((movieID))
-        
+        soundtrack = getSoundtrack(movieID)
+        location = getLocation((movieID))        
 
         listAllDetail = [movieID, title , year, genre, rating, soundtrack, location]
-        getMovieTitleSerialized = json.dumps(listAllDetail)
+        getMovieDetailSerialized = json.dumps(listAllDetail)
 
-        return JsonResponse(getMovieTitleSerialized, safe=False)
+        return JsonResponse(getMovieDetailSerialized, safe=False)
     except ValueError as e:
         return Response(e.args[0].status.HTTP_400_BAD_REQUEST)
 
+
+# detail methods
 def getID(getMovie):
-    return getMovie[0].movieID
+  return getMovie[0].movieID
 
 def getYear(getMovie):
-    return getMovie[0]['year']
+  return getMovie[0]['year']
 
 def getGenre(movieContainers):
-    genre = movieContainers[0].p.find('span', class_='genre').text
-    return ''.join(genre.split())  # convert list to string
+  genre = movieContainers[0].p.find('span', class_='genre').text
+  return ''.join(genre.split())  # convert list to string
 
 def getRating(movieContainers):
-    rating = movieContainers[0].find('strong', class_='').text
-    return rating
+  rating = movieContainers[0].find('strong', class_='').text
+  return rating
 
-def getSoundtrackWithImdbpy(movieID):
-  ms = imdbpy_library.get_movie(movieID)
-  imdbpy_library.update(ms, 'soundtrack')
+def getSoundtrack(movieID):
+  ms = imdbpyLibrary.get_movie(movieID)
+  imdbpyLibrary.update(ms, 'soundtrack')
   return (ms['soundtrack'])
 
-def getLocationWithImdbpy(movieID):
-    locations = imdbpy_library.get_movie_locations(movieID)
-    return locations['data']['locations']
+def getLocation(movieID):
+  locations = imdbpyLibrary.get_movie_locations(movieID)
+  return locations['data']['locations']

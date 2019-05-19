@@ -17,9 +17,9 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
 
-from imdbApp import views
+from api import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^movietitle/',views.MovieTitle)
+    url(r'^moviedetail/',views.MovieDetail)
 ]
