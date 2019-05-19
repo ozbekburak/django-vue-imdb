@@ -14,3 +14,9 @@ class test_movie(APITestCase):
 
     def test_movieTitle(self):
         self.assertTrue("Oslo, August 31st" in json.loads(self.response.content))
+
+    def test_movieLocation(self):
+        self.assertTrue("Oslo" in json.loads(self.response.content))
+
+    def test_movieSoundtracks(self):
+        self.assertTrue("Patch To Lucy" in json.loads(self.response.content))
